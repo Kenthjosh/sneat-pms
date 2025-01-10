@@ -20,14 +20,9 @@ $signedIn = $auth->attempt(
 
 if ($signedIn) {
     $user = App::resolve(Database::class)
-        ->query('SELECT * FROM tbl_users WHERE email = :email', [
+        ->query('SELECT * FROM active_users_view WHERE email = :email', [
             'email' => $attributes['email']
         ])->find();
-
-    if($user['is_deleted']){
-        $form->error('email', 'Email not found in database');
-        $form->throw();
-    }
 
     $auth->login($user);
 
